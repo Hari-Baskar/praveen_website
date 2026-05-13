@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:praveen_website/core/themes/app_colors.dart';
-import 'package:praveen_website/theme/app_theme.dart';
+import 'package:praveen_website/core/themes/app_text_styles.dart';
+import 'package:praveen_website/core/styles/app_spacing.dart';
 
 class AppTextField extends StatelessWidget {
   final String label;
@@ -25,8 +26,8 @@ class AppTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTextStyles.small(
+            context,
             fontWeight: FontWeight.w600,
             color: isDark
                 ? AppColors.darkSecondaryText
@@ -37,21 +38,16 @@ class AppTextField extends StatelessWidget {
         TextField(
           controller: controller,
           maxLines: maxLines,
-          style: TextStyle(
-            color: isDark ? AppColors.darkText : AppColors.lightText,
-          ),
+          style: AppTextStyles.body(context),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-              color:
-                  (isDark
-                          ? AppColors.darkSecondaryText
-                          : AppColors.lightSecondaryText)
-                      .withOpacity(0.5),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
+            hintStyle: AppTextStyles.body(context, color: (isDark
+                            ? AppColors.darkSecondaryText
+                            : AppColors.lightSecondaryText)
+                        .withOpacity(0.5)),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.w16,
+              vertical: maxLines > 1 ? AppSpacing.h16 : AppSpacing.h12,
             ),
           ),
         ),

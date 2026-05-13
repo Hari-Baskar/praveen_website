@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:praveen_website/core/themes/app_colors.dart';
 import 'package:praveen_website/core/themes/app_text_styles.dart';
 import 'package:praveen_website/core/styles/app_spacing.dart';
+import 'package:praveen_website/core/styles/app_size.dart';
 import 'package:praveen_website/core/utils/link_helper.dart';
+import 'package:praveen_website/widgets/common/app_logo.dart';
 
 class Footer extends StatelessWidget {
   final VoidCallback onPrivacyPressed;
@@ -31,17 +32,13 @@ class Footer extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _SocialIcon(LucideIcons.twitter, 'https://twitter.com/praveenapps'),
-              SizedBox(width: AppSpacing.w16),
-              _SocialIcon(LucideIcons.github, 'https://github.com/praveenapps'),
-              SizedBox(width: AppSpacing.w16),
-              _SocialIcon(LucideIcons.linkedin, 'https://linkedin.com/in/praveenapps'),
+              const AppLogo(size: 28),
+              SizedBox(width: AppSpacing.w12),
+              Text(
+                'Praveen Apps',
+                style: AppTextStyles.heading(context, fontWeight: FontWeight.bold),
+              ),
             ],
-          ),
-          SizedBox(height: AppSpacing.h32),
-          Text(
-            'Praveen Apps',
-            style: AppTextStyles.heading(context, fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: AppSpacing.h12),
           Text(
@@ -67,21 +64,6 @@ class Footer extends StatelessWidget {
     );
   }
 
-  Widget _SocialIcon(IconData icon, String url) {
-    return InkWell(
-      onTap: () => LinkHelper.launchURL(url),
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: AppColors.darkBorder),
-        ),
-        child: Icon(icon, size: 20, color: AppColors.darkSecondaryText),
-      ),
-    );
-  }
 }
 
 class _FooterLink extends StatelessWidget {

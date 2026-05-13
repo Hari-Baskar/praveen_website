@@ -60,13 +60,15 @@ class _ContactSectionState extends State<ContactSection> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth > 900) {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(child: _ContactInfo()),
-                SizedBox(width: AppSpacing.w32 * 2),
-                Expanded(child: _buildForm()),
-              ],
+            return IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Expanded(child: _ContactInfo()),
+                  SizedBox(width: AppSpacing.w32 * 2),
+                  Expanded(child: _buildForm()),
+                ],
+              ),
             );
           }
           return Column(

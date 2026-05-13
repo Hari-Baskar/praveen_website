@@ -5,6 +5,7 @@ import 'package:praveen_website/core/themes/app_colors.dart';
 import 'package:praveen_website/core/themes/app_text_styles.dart';
 import 'package:praveen_website/core/styles/app_spacing.dart';
 import 'package:praveen_website/core/utils/link_helper.dart';
+import 'package:praveen_website/core/styles/app_size.dart';
 
 class AppsSection extends StatelessWidget {
   const AppsSection({super.key});
@@ -17,7 +18,8 @@ class AppsSection extends StatelessWidget {
         'desc': 'Social voting and comparison app. Users upload opinions and participate in community battles.',
         'status': 'Available on Google Play',
         'color': AppColors.buttonColor,
-        'url': 'https://play.google.com/store/apps/details?id=com.versus.app', // Example URL
+        'url': 'https://play.google.com/store/apps/details?id=com.praveen.vsapp',
+        'iconAsset': 'assets/images/versus.png',
       },
       {
         'name': 'Expense Tracker',
@@ -38,7 +40,7 @@ class AppsSection extends StatelessWidget {
           Text('Our Apps', style: AppTextStyles.splashHeading(context, fontSize: 32)),
           SizedBox(height: AppSpacing.h16),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600),
+            constraints: const BoxConstraints(maxWidth: AppSize.maxAppCardWidth),
             child: Text(
               'Discover our range of applications designed to simplify your life and connect you with others.',
               textAlign: TextAlign.center,
@@ -49,11 +51,14 @@ class AppsSection extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.maxWidth > 800) {
-                return Row(
-                  children: apps.map((app) => Expanded(child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppSpacing.w12),
-                    child: _AppCard(app: app),
-                  ))).toList(),
+                return IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: apps.map((app) => Expanded(child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppSpacing.w12),
+                      child: _AppCard(app: app),
+                    ))).toList(),
+                  ),
                 );
               }
               return Column(
@@ -79,28 +84,38 @@ class _AppCard extends StatelessWidget {
     final bool isComingSoon = app['status'] == 'Coming Soon';
 
     return Container(
-      padding: const EdgeInsets.all(32),
+      constraints: const BoxConstraints(minHeight: AppSize.appCardMinHeight),
+      padding: EdgeInsets.all(AppSpacing.h32),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(AppSize.cardRadius),
         border: Border.all(color: Theme.of(context).dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 80, height: 80,
+            width: AppSize.iconExtraLarge, height: AppSize.iconExtraLarge,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: (app['color'] as Color).withOpacity(0.1),
             ),
-            child: Icon(LucideIcons.appWindow, size: 40, color: app['color']),
+            child: app['iconAsset'] != null
+                ? Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Image.asset(
+                      app['iconAsset'],
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                : Icon(LucideIcons.appWindow, size: AppSize.iconLarge, color: app['color']),
           ),
-          const SizedBox(height: 24),
-          Text(app['name'], style: AppTextStyles.heading(context, fontSize: 24, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.h24),
+          Text(app['name'], style: AppTextStyles.heading(context, fontWeight: FontWeight.bold)),
+          SizedBox(height: AppSpacing.h12),
           Text(app['desc'], style: AppTextStyles.body(context, color: AppColors.darkSecondaryText)),
-          const SizedBox(height: 32),
+          const Spacer(),
+          SizedBox(height: AppSpacing.h32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -108,25 +123,12 @@ class _AppCard extends StatelessWidget {
               if (!isComingSoon)
                 ElevatedButton.icon(
                   onPressed: () => LinkHelper.launchURL(app['url']),
-                  icon: const Icon(LucideIcons.play, size: 16),
+                  icon: Icon(LucideIcons.play, size: AppSize.iconSmall / 1.5),
                   label: Text('Google Play', style: AppTextStyles.small(context, color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.buttonColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.inputRadius)),
                   ),
-                )
-              else
-                TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('We will notify you when this app is available!')),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Theme.of(context).dividerColor.withOpacity(0.1),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: Text('Notify Me', style: AppTextStyles.small(context)),
                 ),
             ],
           ),

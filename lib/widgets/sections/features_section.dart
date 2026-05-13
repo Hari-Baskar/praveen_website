@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:praveen_website/core/themes/app_colors.dart';
 import 'package:praveen_website/core/themes/app_text_styles.dart';
 import 'package:praveen_website/core/styles/app_spacing.dart';
+import 'package:praveen_website/core/styles/app_size.dart';
 
 class FeaturesSection extends StatelessWidget {
   const FeaturesSection({super.key});
@@ -26,49 +27,58 @@ class FeaturesSection extends StatelessWidget {
         children: [
           Text('Powerful Features', style: AppTextStyles.splashHeading(context, fontSize: 32)),
           SizedBox(height: AppSpacing.h64),
-          Center(
-            child: Wrap(
-              spacing: 24,
-              runSpacing: 24,
-              alignment: WrapAlignment.center,
-              children: features.asMap().entries.map((entry) {
-                final index = entry.key;
-                final f = entry.value;
-                return Container(
-                  width: 350, // Fixed width for consistency
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Theme.of(context).dividerColor),
-                    boxShadow: isDark ? [] : [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.03),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min, // Use only required height
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(f['icon'] as IconData, color: AppColors.buttonColor, size: 28),
-                      const SizedBox(height: 16),
-                      Text(
-                        f['name'] as String, 
-                        style: AppTextStyles.heading(context, fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        f['desc'] as String, 
-                        style: AppTextStyles.body(context, color: isDark ? AppColors.darkSecondaryText : AppColors.lightSecondaryText),
-                      ),
-                    ],
-                  ),
-                ).animate().fadeIn(delay: (index * 50).ms).scale(begin: const Offset(0.95, 0.95));
-              }).toList(),
-            ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: AppSize.featureCardWidth,
+                  mainAxisExtent: AppSize.featureCardHeight,
+                  crossAxisSpacing: AppSpacing.w24,
+                  mainAxisSpacing: AppSpacing.h24,
+                ),
+                itemCount: features.length,
+                itemBuilder: (context, index) {
+                  final f = features[index];
+                  return Container(
+                    padding: EdgeInsets.all(AppSpacing.h24),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(AppSize.cardRadius / 1.5),
+                      border: Border.all(color: Theme.of(context).dividerColor),
+                      boxShadow: isDark ? [] : [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(f['icon'] as IconData, color: AppColors.buttonColor, size: AppSize.iconMedium),
+                        SizedBox(height: AppSpacing.h16),
+                        Text(
+                          f['name'] as String, 
+                          style: AppTextStyles.heading(context, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: AppSpacing.h8),
+                        Expanded(
+                          child: Text(
+                            f['desc'] as String, 
+                            style: AppTextStyles.body(context, color: isDark ? AppColors.darkSecondaryText : AppColors.lightSecondaryText),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ).animate().fadeIn(delay: (index * 50).ms).scale(begin: const Offset(0.95, 0.95));
+                },
+              );
+            },
           ),
         ],
       ),

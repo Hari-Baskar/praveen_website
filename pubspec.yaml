@@ -37,6 +37,9 @@ dependencies:
   go_router: ^17.2.3
   url_launcher: ^6.3.2
   flutter_screenutil: ^5.9.3
+  firebase_core: ^4.8.0
+  firebase_analytics: ^12.4.0
+  cloud_firestore: ^6.4.0
 
 dev_dependencies:
   flutter_test:

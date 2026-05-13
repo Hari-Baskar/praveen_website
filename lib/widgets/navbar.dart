@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:praveen_website/core/themes/app_colors.dart';
 import 'package:praveen_website/core/themes/app_text_styles.dart';
 import 'package:praveen_website/core/styles/app_spacing.dart';
+import 'package:praveen_website/core/styles/app_size.dart';
+import 'package:praveen_website/widgets/common/app_logo.dart';
 
 class Navbar extends StatelessWidget {
   final VoidCallback onAboutPressed;
@@ -22,7 +24,7 @@ class Navbar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      height: 80,
+      height: AppSize.iconExtraLarge,
       margin: EdgeInsets.symmetric(
         horizontal: AppSpacing.w12,
         vertical: AppSpacing.h12,
@@ -31,7 +33,7 @@ class Navbar extends StatelessWidget {
       decoration: BoxDecoration(
         color: (isDark ? AppColors.darkBackground : AppColors.white)
             .withOpacity(0.8),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSize.buttonRadius + 4),
         border: Border.all(
           color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
         ),
@@ -47,17 +49,21 @@ class Navbar extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: onAboutPressed,
-            child: Text(
-              'Praveen Apps',
-              style: AppTextStyles.heading(
-                context,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Row(
+              children: [
+                Text(
+                  'Praveen Apps',
+                  style: AppTextStyles.heading(
+                    context,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
           const Spacer(),
-          if (MediaQuery.of(context).size.width > 800)
+          if (MediaQuery.of(context).size.width > AppSize.tabletBreakpoint)
             Row(
               children: [
                 _NavLink(context, 'About', onAboutPressed),
